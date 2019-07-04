@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  localstack:
+    image: localstack/localstack
+    hostname: localhost
+    container_name: localstack
+    ports:
+      - 4576:4576
+      - 0:8080
+    environment:
+      SERVICES: sqs
+      HOSTNAME_EXTERNAL: localhost
+      HOSTNAME: localhost
+      SQS_PORT_EXTERNAL: 4576
+      DEFAULT_REGION: us-east-1

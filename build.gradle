@@ -1,0 +1,67 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'docker-compose'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.8.13"
+    }
+}
+
+
+group 'com.swa.sqs'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-sqs', version: '1.11.584'
+    compile group: 'org.apache.camel', name: 'camel-aws', version: '2.24.1'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+dockerCompose {
+
+    useComposeFiles = ["./docker-compose.yml"]
+    startedServices = ['localstack']
+    forceRecreate = false
+    buildBeforeUp = true
+    buildBeforePull = true
+    ignorePushFailure = false
+    buildAdditionalArgs = ['--force-rm']
+
+    //logging
+    captureContainersOutput = false
+    captureContainersOutputToFile = "${buildDir.path}/logs/all_container_logs.txt"
+    //separate logs for all the containers
+    containerLogToDir = project.file("${buildDir.path}/logs")
+    captureContainersOutputToFiles = "${buildDir.path}/logs/separated"
+
+    waitForTcpPorts = true
+
+    removeContainers = true
+    removeVolumes = true
+    removeOrphans = true
+}
+
+jar {
+    from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+
+    manifest {
+        attributes(
+                'Main-Class': 'com.swa.sqs.ProducerMain'
+        )
+    }
+}
