@@ -1,6 +1,6 @@
 ## SQS Local Camel
 
-This is project to test the usage of Apache Camel and Amazon SQS in Local Stack. 
+This is a project to test the usage of Apache Camel and Amazon SQS in Local Stack. 
 
 
 To run the PoC run: 
