@@ -55,7 +55,21 @@ dockerCompose {
 
 test {
     testLogging.events(TestLogEvent.STANDARD_OUT)
+    doFirst{
+        def sqsPort = getPublicPortOfContainer("localstack", 4576)
+        println(sqsPort)
+        systemProperty 'SQS_PORT', sqsPort
+    }
 }
+
+
+def getPublicPortOfContainer(containerName, containerPort){
+    def dockerPortCommand = "docker port %s %s"
+    def command = String.format(dockerPortCommand, containerName, containerPort)
+    def result = command.execute().text.trim()
+    return result.substring(result.indexOf(":") + 1)
+}
+
 
 test.dependsOn composeUp
 test.finalizedBy composeDown
