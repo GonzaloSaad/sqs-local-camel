@@ -1,31 +1,37 @@
-package com.swa.sqs;
+package com.swa.sqs.sqs;
 
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.amazonaws.services.sqs.model.CreateQueueResult;
+import com.swa.sqs.Environment;
+import com.swa.sqs.QueueURL;
 
-import java.util.Scanner;
+public class SQSQueueCreator {
+    private final String queueName;
 
-public class Creator {
-    private static final String ENDPOINT = "http://localhost:4576/";
-    private static final String REGION = "us-east-1";
+    public SQSQueueCreator(String queueName) {
+        this.queueName = queueName;
+    }
 
-    public void execute() {
+    public void create() {
         AmazonSQS sqs = AmazonSQSClientBuilder.standard()
                 .withEndpointConfiguration(getEndpoint())
                 .build();
 
         CreateQueueRequest createQueueRequest = new CreateQueueRequest()
-                .withQueueName("camelqueue");
+                .withQueueName(queueName);
         CreateQueueResult result = sqs.createQueue(createQueueRequest);
+        QueueURL.getInstance().setQueueURL(result.getQueueUrl());
         System.out.println("QueueURL: " + result.getQueueUrl());
 
     }
 
     private AwsClientBuilder.EndpointConfiguration getEndpoint() {
-        return new AwsClientBuilder.EndpointConfiguration(ENDPOINT, REGION);
+        return new AwsClientBuilder.EndpointConfiguration(
+                Environment.getBaseEndpoint(),
+                Environment.getRegion());
     }
 }
 

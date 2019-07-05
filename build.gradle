@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'docker-compose'
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 buildscript {
     repositories {
@@ -52,16 +53,9 @@ dockerCompose {
     removeOrphans = true
 }
 
-jar {
-    from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
-    }
-
-    manifest {
-        attributes(
-                'Main-Class': 'com.swa.sqs.ProducerMain'
-        )
-    }
+test {
+    testLogging.events(TestLogEvent.STANDARD_OUT)
 }
+
+test.dependsOn composeUp
+test.finalizedBy composeDown
