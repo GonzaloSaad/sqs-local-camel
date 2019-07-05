@@ -1,12 +1,12 @@
-package com.swa.sqs.sqs;
+package org.poc.sqs;
 
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.amazonaws.services.sqs.model.CreateQueueResult;
-import com.swa.sqs.Environment;
-import com.swa.sqs.QueueURL;
+import org.poc.Environment;
+import org.poc.QueueURL;
 
 public class SQSQueueCreator {
     private final String queueName;

@@ -1,4 +1,4 @@
-package com.swa.sqs;
+package org.poc;
 
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
-package com.swa.sqs.sqs;
+package org.poc.sqs;
 
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
-import com.swa.sqs.QueueURL;
+import org.poc.QueueURL;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,11 +1,11 @@
-package com.swa.sqs.camel;
+package org.poc.camel;
 
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 public class CamelRoute extends RouteBuilder {
 
-    private static final String URI_TEMPLATE = "aws-sqs://%s?amazonSQSClient=#client" +
+    private static final String URI_TEMPLATE = "aws-poc://%s?amazonSQSClient=#client" +
             "&receiveMessageWaitTimeSeconds=10" +
             "&messageAttributeNames=All";
 

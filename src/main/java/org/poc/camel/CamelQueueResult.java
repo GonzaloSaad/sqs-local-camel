@@ -1,4 +1,4 @@
-package com.swa.sqs.camel;
+package org.poc.camel;
 
 import java.util.Map;
 

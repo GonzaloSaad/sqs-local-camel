@@ -1,7 +1,7 @@
-import com.swa.sqs.camel.CamelConsumer;
-import com.swa.sqs.camel.CamelQueueResult;
-import com.swa.sqs.sqs.SQSProducer;
-import com.swa.sqs.sqs.SQSQueueCreator;
+import org.poc.camel.CamelConsumer;
+import org.poc.camel.CamelQueueResult;
+import org.poc.sqs.SQSProducer;
+import org.poc.sqs.SQSQueueCreator;
 import org.junit.Test;
 
 import java.util.HashMap;

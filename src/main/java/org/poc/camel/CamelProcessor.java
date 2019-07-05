@@ -1,4 +1,4 @@
-package com.swa.sqs.camel;
+package org.poc.camel;
 
 import com.amazonaws.services.sqs.model.MessageAttributeValue;
 import org.apache.camel.Exchange;
