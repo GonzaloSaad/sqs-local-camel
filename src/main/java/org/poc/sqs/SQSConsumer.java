@@ -4,6 +4,7 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
 import org.poc.QueueURL;
+import org.poc.SQSClientProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public class SQSConsumer {
         Optional<String> queueURL = QueueURL.getInstance().getQueueURL();
 
         if (queueURL.isPresent()) {
-            AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
+            AmazonSQS sqs = SQSClientProvider.getInstance().getSqsClient();
 
             List<Message> messages = sqs.receiveMessage(queueURL.get()).getMessages();
             for (Message m : messages) {

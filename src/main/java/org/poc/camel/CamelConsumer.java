@@ -1,5 +1,8 @@
 package org.poc.camel;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
@@ -7,6 +10,7 @@ import org.poc.Environment;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
+import org.poc.SQSClientProvider;
 
 public class CamelConsumer {
 
@@ -18,7 +22,7 @@ public class CamelConsumer {
 
     public CamelQueueResult consume() throws Exception {
 
-        AmazonSQS client = getSqsClient();
+        AmazonSQS client = SQSClientProvider.getInstance().getSqsClient();
         SimpleRegistry registry = new SimpleRegistry();
         registry.put("client", client);
 
@@ -31,18 +35,5 @@ public class CamelConsumer {
         Thread.sleep(3000);
         camelContext.stop();
         return camelProcessor.getResult();
-    }
-
-    private AmazonSQS getSqsClient() {
-        return AmazonSQSClientBuilder.standard()
-                .withEndpointConfiguration(getEndpoint())
-                .build();
-    }
-
-    private AwsClientBuilder.EndpointConfiguration getEndpoint() {
-        return new AwsClientBuilder.EndpointConfiguration(
-                Environment.getBaseEndpoint(),
-                Environment.getRegion()
-        );
     }
 }

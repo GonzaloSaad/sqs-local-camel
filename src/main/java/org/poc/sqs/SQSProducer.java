@@ -6,6 +6,7 @@ import com.amazonaws.services.sqs.model.MessageAttributeValue;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageResult;
 import org.poc.QueueURL;
+import org.poc.SQSClientProvider;
 
 import java.util.Map;
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class SQSProducer {
         if (queueUrl.isPresent()) {
             System.out.println("Sending message to SQS.");
 
-            AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
+            AmazonSQS sqs = SQSClientProvider.getInstance().getSqsClient();
             SendMessageRequest request = new SendMessageRequest()
                     .withQueueUrl(queueUrl.get())
                     .withMessageBody(messageBody)

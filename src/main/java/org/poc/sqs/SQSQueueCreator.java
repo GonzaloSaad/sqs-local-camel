@@ -7,6 +7,7 @@ import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.amazonaws.services.sqs.model.CreateQueueResult;
 import org.poc.Environment;
 import org.poc.QueueURL;
+import org.poc.SQSClientProvider;
 
 public class SQSQueueCreator {
     private final String queueName;
@@ -16,9 +17,7 @@ public class SQSQueueCreator {
     }
 
     public void create() {
-        AmazonSQS sqs = AmazonSQSClientBuilder.standard()
-                .withEndpointConfiguration(getEndpoint())
-                .build();
+        AmazonSQS sqs = SQSClientProvider.getInstance().getSqsClient();
 
         CreateQueueRequest createQueueRequest = new CreateQueueRequest()
                 .withQueueName(queueName);
