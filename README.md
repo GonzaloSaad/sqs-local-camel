@@ -7,7 +7,7 @@ To run the PoC run:
 
 `./gradlew clean test`
 
-This will start the local stack with SQS listening in port 4576.
+This will start the local stack with SQS listening in a random port (bound with the container port 4576).
 
 You need to have: 
 
