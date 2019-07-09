@@ -1,25 +1,28 @@
-package org.poc.camel;
+package org.poc.camel.processor;
 
 import com.amazonaws.services.sqs.model.MessageAttributeValue;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.Processor;
+import org.poc.camel.CamelQueueResult;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CamelProcessor implements Processor {
+public class JMSCamelProcessor implements CamelProcessor {
 
     private String messageBody;
     private Map<String, String> messageAttributes;
 
     @Override
-    public void process(Exchange exchange) {
-        System.out.println("Reading message...");
-        Message message = exchange.getMessage();
+    public CamelQueueResult getResult() {
+        return new CamelQueueResult(messageBody, messageAttributes);
+    }
 
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        Message message = exchange.getMessage();
         messageBody = (String) message.getBody();
         System.out.println("Body: " + messageBody);
 
@@ -27,20 +30,15 @@ public class CamelProcessor implements Processor {
         System.out.println("Attributes: " + messageAttributes);
     }
 
-    @SuppressWarnings("unchecked")
     private Map<String, String> getMessageAttributes(Message message) {
         return Optional.ofNullable(message)
                 .map(Message::getHeaders)
-                .map(map -> map.get("CamelAwsSqsMessageAttributes"))
-                .map(o -> (Map<String, MessageAttributeValue>) o)
                 .map(Map::entrySet)
-                .orElse(new HashSet<>())
+                .orElseGet(HashSet::new)
                 .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        e-> e.getValue().getStringValue()));
-    }
-
-    public CamelQueueResult getResult() {
-        return new CamelQueueResult(messageBody, messageAttributes);
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> Optional.ofNullable(e.getValue()).map(Object::toString).orElse("")
+                ));
     }
 }

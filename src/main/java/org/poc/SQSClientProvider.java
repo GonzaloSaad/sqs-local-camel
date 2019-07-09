@@ -11,7 +11,7 @@ public class SQSClientProvider {
     private static SQSClientProvider instance;
 
     private SQSClientProvider(){
-        
+
     }
 
     public static SQSClientProvider getInstance() {
